@@ -1,0 +1,12 @@
+{
+    "name": "meu-flask-app",
+    "version": "1.0.0",
+    "scripts": {
+      "start": "gunicorn app:app --bind 0.0.0.0:$PORT"
+    },
+    "engines": {
+      "node": "14.x"
+    }
+  }
+  
+  
