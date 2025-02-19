@@ -3,7 +3,9 @@ import random
 
 #colores
 PRETO = (0,0,0)
-amarelo = (255,210,50)
+branco = (255,255,255)
+amarelo = (243,216,143)
+vermelho = (245,103,115)
 #paleta 1
 azul_melodia_suave = (212,234,250)
 azul_ceu = (53,94,182)
@@ -479,8 +481,10 @@ def tela_derrota():
       
 
         screen.blit(fundo_tela_derrota, (0, 0))
-        exibe_texto("Bom trabalho!!", lavanda, LARGURA_TELA // 3 -40, ALTURA_TELA // 3-20, "crystal.ttf", 40)
-        exibe_texto("Pressione 'Espaço' para Jogar Novamente", azul_melodia_suave, LARGURA_TELA // 3 -40, ALTURA_TELA // 3+20, "crewni.ttf", 25)
+        exibe_texto("Nao foi dessa vez...", vermelho, 60, 70, "crystal.ttf", 40)
+        exibe_texto("Mas nao desista!", amarelo, 60, 510, "crystal.ttf", 40)
+
+        exibe_texto("pressione espaco para jogar novamente!", amarelo, 30, 610, "crystal.ttf", 25)
 
         pygame.display.update()
         clock.tick(30)
