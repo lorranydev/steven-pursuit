@@ -400,7 +400,7 @@ def jogo():
             fase5_ativa = True
             fase5_mostrada = True
             tempo_fase5 = pygame.time.get_ticks()
-        if pontuacao >= 6501 and not fase6_ativa:
+        if pontuacao >= 6505 and not fase6_ativa:
             fase6_ativa = True
             fase6_mostrada = True
             tempo_fase6 = pygame.time.get_ticks() 
