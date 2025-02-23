@@ -192,7 +192,7 @@ def tela_niveis():
                     fade_out(screen, azul_melodia_suave)
                     jogo()
                     return
-                elif evento.key == pygame.K_KP_2 or evento.key == pygame.K_1:
+                elif evento.key == pygame.K_KP_2 or evento.key == pygame.K_2:
                     nivel = 2
                     fade_out(screen, azul_melodia_suave)
                     jogo()
@@ -329,7 +329,6 @@ def jogo():
                 pygame.mixer.music.set_volume(0.15)        
                 fade_out(screen, amarelo)
                 tela_derrota()
-
         
         obstaculos = [obs for obs in obstaculos if obs[0] > 0]
 
@@ -352,7 +351,9 @@ def jogo():
         pontuacao += 1
         exibe_texto(f"Score: {pontuacao}", lavanda, 10, 10, "crewni.ttf", 20)    
 
-        if nivel == 1 and pontuacao >= 6500:
+
+        #niveis
+        if nivel == 1 and pontuacao >= 6000:
                 pygame.mixer.music.stop() 
                 pygame.mixer.music.load("msc_win.ogg")  
                 pygame.mixer.music.play(-1) 
@@ -361,7 +362,7 @@ def jogo():
                 pygame.display.update()
                 tela_win1()       
                 return
-        if nivel == 2 and pontuacao >= 8000:
+        if nivel == 2 and pontuacao >= 7500:
                 pygame.mixer.music.stop() 
                 pygame.mixer.music.load("msc_win.ogg")  
                 pygame.mixer.music.play(-1) 
@@ -379,7 +380,25 @@ def jogo():
                 pygame.display.update()
                 tela_win1()       
                 return
-                        
+        if nivel == 1 and pontuacao >= 150 and pontuacao <=300:    
+            exibe_texto("Consiga              de score!", azul_ceu, 160, 295, "regcrystal.ttf", 30)
+            exibe_texto("6.000", azul_ceu, 385, 300, "crewni.ttf", 40)
+        if nivel == 2 and pontuacao >= 150 and pontuacao <=300:    
+            exibe_texto("Consiga              de score!", azul_ceu, 160, 295, "regcrystal.ttf", 30)
+            exibe_texto("7.500", azul_ceu, 385, 300, "crewni.ttf", 40)
+        if nivel == 3 and pontuacao >= 150 and pontuacao <=300:    
+            exibe_texto("Consiga               de score!", azul_ceu, 160, 295, "regcrystal.ttf", 30)
+            exibe_texto("10.000", azul_ceu, 383, 300, "crewni.ttf", 40)
+   
+        #quase la
+        if nivel == 1 and pontuacao >= 5000 and pontuacao <=5150:    
+            exibe_texto("quase la!", azul_ceu, 315, 295, "crystal.ttf", 35)
+        if nivel == 2 and pontuacao >= 6750 and pontuacao <=6900:    
+            exibe_texto("quase la!", azul_ceu, 315, 295, "crystal.ttf", 35)
+        if nivel == 3 and pontuacao >= 9000 and pontuacao <=9150:    
+            exibe_texto("quase la!", azul_ceu, 315, 295, "crystal.ttf", 35)
+        
+        #fases
         if pontuacao >= 500 and not fase1_ativa:
             fase1_ativa = True
             fase1_mostrada = True
@@ -400,12 +419,11 @@ def jogo():
             fase5_ativa = True
             fase5_mostrada = True
             tempo_fase5 = pygame.time.get_ticks()
-        if pontuacao >= 6501 and not fase6_ativa:
+        if pontuacao >= 6500 and not fase6_ativa:
             fase6_ativa = True
             fase6_mostrada = True
             tempo_fase6 = pygame.time.get_ticks() 
          
-        
         if fase1_mostrada:
             screen.blit(regcrystal.render("Fase", True, azul_melodia_suave), (285, 295))
             screen.blit(crewni.render("1", True, azul_melodia_suave), (580, 290))
@@ -573,6 +591,7 @@ def tela_beta_testers():
         clock.tick(30)
 
 def tela_derrota():
+    global pontuacao
     rodando = True
     while rodando:
         for evento in pygame.event.get():
@@ -590,14 +609,17 @@ def tela_derrota():
                     fade_out(screen, lavanda)
                     tela_inicial()
                     return   
-      
 
         screen.blit(fundo_tela_derrota, (0, 0))
-        exibe_texto("Nao foi dessa vez...", rosa_vermelho, 25, 5, "crystal.ttf", 40)
-        exibe_texto("Mas nao desista!", cinza_roxo, 20, 75, "crystal.ttf", 40)
+  
+        exibe_texto("Score", rosa_vermelho, LARGURA_TELA/1.168, ALTURA_TELA/38.888, "regcrystal.ttf", 20)  
+        exibe_texto(f"{pontuacao}", rosa_vermelho, LARGURA_TELA/1.125, ALTURA_TELA/12.28, "crewni.ttf", 25)
 
-        exibe_texto("pressione espaco para Jogar", amarelo, 160, 565, "regcrystal.ttf", 30)
-        exibe_texto("pressione M para ir ao menu", amarelo, 193, 620, "regcrystal.ttf", 30)
+        exibe_texto("Nao foi dessa vez...", rosa_vermelho, LARGURA_TELA/36, ALTURA_TELA/28, "crystal.ttf", 40)
+        exibe_texto("Mas nao desista!", cinza_roxo, LARGURA_TELA/45, ALTURA_TELA/7.368, "crystal.ttf", 40)
+
+        exibe_texto("pressione espaco para Jogar", amarelo, LARGURA_TELA/9, ALTURA_TELA/1.228, "regcrystal.ttf", 30)
+        exibe_texto("pressione M para ir ao menu", amarelo, LARGURA_TELA/8.57, ALTURA_TELA/1.12, "regcrystal.ttf", 30)
 
         pygame.display.update()
         clock.tick(30)
