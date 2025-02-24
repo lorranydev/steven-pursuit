@@ -173,10 +173,10 @@ def tela_inicial():
                     return
 
         screen.blit(fundo_tela_inicial, (0, 0))
-        exibe_texto("Steven Pursuit", azul_ceu, LARGURA_TELA // 3-205, ALTURA_TELA // 3-150, "crystal.ttf", 50)
-        exibe_texto("pressione espaco para jogar", azul_ceu, LARGURA_TELA // 3 -140, ALTURA_TELA // 3-15, "regcrystal.ttf", 25)
-        exibe_texto("I para instrucoes", azul_melodia_suave, LARGURA_TELA // 3 -8, ALTURA_TELA // 3+350, "crystal.ttf", 25)
-        exibe_texto("C para créditos", azul_melodia_suave, LARGURA_TELA // 3 -9, ALTURA_TELA // 3+405, "crystal.ttf", 25)
+        exibe_texto("Steven Pursuit", azul_ceu, LARGURA_TELA // 3-205, ALTURA_TELA // 3-170, "crystal.ttf", 50)
+        exibe_texto("pressione espaco para jogar", azul_ceu, LARGURA_TELA // 3 -140, ALTURA_TELA // 3-25, "regcrystal.ttf", 25)
+        exibe_texto("I para instrucoes", azul_melodia_suave, LARGURA_TELA // 3 -8, ALTURA_TELA // 3+340, "crystal.ttf", 25)
+        exibe_texto("C para créditos", azul_melodia_suave, LARGURA_TELA // 3 -9, ALTURA_TELA // 3+395, "crystal.ttf", 25)
 
         pygame.display.update()
         clock.tick(30)
@@ -226,7 +226,7 @@ def tela_niveis():
         clock.tick(30)
 
 def jogo():
-    global perso_x, perso_y, velocidade_y, fundo_x, frame_atual, ultimo_tempo, pontuacao, nivel
+    global perso_x, perso_y, velocidade_y, fundo_x, frame_atual, ultimo_tempo, pontuacao, nivel, tempo_entre_frames
     perso_x = 50
     perso_y = chao_y - frames_steven[0].get_height()
     velocidade_y = 0
@@ -291,6 +291,7 @@ def jogo():
             ultimo_tempo = agora
 
 
+    
         if fase6_ativa:
             chance = 6 
             velocidade_obstaculo = 7 
@@ -354,7 +355,7 @@ def jogo():
             desenha_img_obstaculo(obstaculo_x, obstaculo_y)
 
         pontuacao += 1
-        exibe_texto(f"Score: {pontuacao}", lavanda, 10, 10, "crewni.ttf", 20)    
+        exibe_texto(f"Score: {pontuacao}", lavanda, LARGURA_TELA/90, ALTURA_TELA/90, "crewni.ttf", 20)    
 
 
         #niveis
@@ -386,22 +387,22 @@ def jogo():
                 tela_win1()       
                 return
         if nivel == 1 and pontuacao >= 150 and pontuacao <=300:    
-            exibe_texto("Consiga              de score!", azul_ceu, 160, 295, "regcrystal.ttf", 30)
-            exibe_texto("6.000", azul_ceu, 385, 300, "crewni.ttf", 40)
+            exibe_texto("Consiga              de score!", azul_ceu, LARGURA_TELA/5.625, ALTURA_TELA/2.37, "regcrystal.ttf", 30)
+            exibe_texto("6.000", azul_ceu, LARGURA_TELA/2.337, ALTURA_TELA/2.456, "crewni.ttf", 40)
         if nivel == 2 and pontuacao >= 150 and pontuacao <=300:    
-            exibe_texto("Consiga              de score!", azul_ceu, 160, 295, "regcrystal.ttf", 30)
-            exibe_texto("7.500", azul_ceu, 385, 300, "crewni.ttf", 40)
+            exibe_texto("Consiga              de score!", azul_ceu, LARGURA_TELA/5.625, ALTURA_TELA/2.37, "regcrystal.ttf", 30)
+            exibe_texto("7.500", azul_ceu, LARGURA_TELA/2.337, ALTURA_TELA/2.456, "crewni.ttf", 40)
         if nivel == 3 and pontuacao >= 150 and pontuacao <=300:    
-            exibe_texto("Consiga               de score!", azul_ceu, 160, 295, "regcrystal.ttf", 30)
-            exibe_texto("10.000", azul_ceu, 383, 300, "crewni.ttf", 40)
+            exibe_texto("Consiga               de score!", azul_ceu, LARGURA_TELA/5.625, ALTURA_TELA/2.37, "regcrystal.ttf", 30)
+            exibe_texto("10.000", azul_ceu, LARGURA_TELA/2.337-3, ALTURA_TELA/2.456, "crewni.ttf", 40)
    
-        #quase la
-        if nivel == 1 and pontuacao >= 5000 and pontuacao <=5150:    
-            exibe_texto("quase la!", azul_ceu, 315, 295, "crystal.ttf", 35)
-        if nivel == 2 and pontuacao >= 6750 and pontuacao <=6900:    
-            exibe_texto("quase la!", azul_ceu, 315, 295, "crystal.ttf", 35)
-        if nivel == 3 and pontuacao >= 9000 and pontuacao <=9150:    
-            exibe_texto("quase la!", azul_ceu, 315, 295, "crystal.ttf", 35)
+        
+        if nivel == 1 and pontuacao >= 5000 and pontuacao <=5200:    
+            exibe_texto("O Big Rosquinha esta logo ali!", azul_ceu, LARGURA_TELA/12.857, ALTURA_TELA/2.37, "crystal.ttf", 30)
+        if nivel == 2 and pontuacao >= 6700 and pontuacao <=6900:    
+            exibe_texto("O Big Rosquinha esta logo ali!", azul_ceu, LARGURA_TELA/12.857, ALTURA_TELA/2.37, "crystal.ttf", 30)
+        if nivel == 3 and pontuacao >= 9000 and pontuacao <=90:    
+            exibe_texto("O Big Rosquinha esta logo ali!", azul_ceu, LARGURA_TELA/12.857, ALTURA_TELA/2.37, "crystal.ttf", 30)
         
         #fases
         if pontuacao >= 500 and not fase1_ativa:
@@ -430,33 +431,33 @@ def jogo():
             tempo_fase6 = pygame.time.get_ticks() 
          
         if fase1_mostrada:
-            screen.blit(regcrystal.render("Fase", True, azul_melodia_suave), (285, 295))
-            screen.blit(crewni.render("1", True, azul_melodia_suave), (580, 290))
+            screen.blit(regcrystal.render("Fase", True, azul_melodia_suave), (LARGURA_TELA/3.158, ALTURA_TELA/2.37))
+            screen.blit(crewni.render("1", True, azul_melodia_suave), (LARGURA_TELA/1.55, ALTURA_TELA/2.413-15))
             if pygame.time.get_ticks() - tempo_fase1 > 2250:
                 fase1_mostrada = False
         if fase2_mostrada:
-            screen.blit(regcrystal.render("Fase", True, azul_melodia_suave), (285, 295))
-            screen.blit(crewni.render("2", True, azul_melodia_suave), (580, 290))
+            screen.blit(regcrystal.render("Fase", True, azul_melodia_suave), (LARGURA_TELA/3.158, ALTURA_TELA/2.37))
+            screen.blit(crewni.render("2", True, azul_melodia_suave), (LARGURA_TELA/1.55, ALTURA_TELA/2.413-15))
             if pygame.time.get_ticks() - tempo_fase2 > 2250:
                 fase2_mostrada = False
         if fase3_mostrada:
-            screen.blit(regcrystal.render("Fase", True, azul_melodia_suave), (285, 295))
-            screen.blit(crewni.render("3", True, azul_melodia_suave), (580, 290))           
+            screen.blit(regcrystal.render("Fase", True, azul_melodia_suave), (LARGURA_TELA/3.158, ALTURA_TELA/2.37))
+            screen.blit(crewni.render("3", True, azul_melodia_suave), (LARGURA_TELA/1.55, ALTURA_TELA/2.413-15))           
             if pygame.time.get_ticks() - tempo_fase3 > 2250:
                 fase3_mostrada = False
         if fase4_mostrada:
-            screen.blit(regcrystal.render("Fase", True, azul_melodia_suave), (285, 295))
-            screen.blit(crewni.render("4", True, azul_melodia_suave), (580, 290))
+            screen.blit(regcrystal.render("Fase", True, azul_melodia_suave), (LARGURA_TELA/3.158, ALTURA_TELA/2.37))
+            screen.blit(crewni.render("4", True, azul_melodia_suave), (LARGURA_TELA/1.55, ALTURA_TELA/2.413-15))
             if pygame.time.get_ticks() - tempo_fase4 > 2250:
                 fase4_mostrada = False
         if fase5_mostrada:
-            screen.blit(regcrystal.render("Fase", True, azul_melodia_suave), (285, 295))
-            screen.blit(crewni.render("5", True, azul_melodia_suave), (580, 290))
+            screen.blit(regcrystal.render("Fase", True, azul_melodia_suave), (LARGURA_TELA/3.158, ALTURA_TELA/2.37))
+            screen.blit(crewni.render("5", True, azul_melodia_suave),(LARGURA_TELA/1.55, ALTURA_TELA/2.413-15))
             if pygame.time.get_ticks() - tempo_fase5 > 2250:
                 fase5_mostrada = False
         if fase6_mostrada:
-            screen.blit(regcrystal.render("Fase", True, azul_melodia_suave), (285, 295))
-            screen.blit(crewni.render("6", True, azul_melodia_suave), (580, 290))
+            screen.blit(regcrystal.render("Fase", True, azul_melodia_suave), (LARGURA_TELA/3.158, ALTURA_TELA/2.37))
+            screen.blit(crewni.render("6", True, azul_melodia_suave), (LARGURA_TELA/1.55, ALTURA_TELA/2.413-15))
             if pygame.time.get_ticks() - tempo_fase6 > 2250:
                 fase6_mostrada = False        
 
@@ -490,10 +491,10 @@ def tela_intro():
                     return   
 
         screen.blit(fundo_tela_intro, (0, 0))
-        exibe_texto("O Steven precisa chegar", verde_peridot, 270, 30, "regcrystal.ttf", 28)
-        exibe_texto("ao Big Rosquinha para", verde_peridot, 337, 95, "regcrystal.ttf", 28)
-        exibe_texto("Comprar biscoito gatinho", verde_peridot, 264, 165, "regcrystal.ttf", 28)
-        exibe_texto("pressione enter para continuar *", roxo, 97, 620, "regcrystal.ttf", 25)
+        exibe_texto("O Steven precisa chegar", verde_peridot, LARGURA_TELA/3.33, ALTURA_TELA/23.33, "regcrystal.ttf", 28)
+        exibe_texto("ao Big Rosquinha para", verde_peridot, LARGURA_TELA/2.67, ALTURA_TELA/7.368, "regcrystal.ttf", 28)
+        exibe_texto("Comprar biscoito gatinho", verde_peridot, LARGURA_TELA/3.409, ALTURA_TELA/4.24, "regcrystal.ttf", 28)
+        exibe_texto("pressione enter para continuar *", roxo, LARGURA_TELA/9.278, ALTURA_TELA/1.129, "regcrystal.ttf", 25)
         
         pygame.display.update()
         clock.tick(30)
@@ -518,19 +519,18 @@ def tela_intro_2():
                     return   
 
         screen.blit(fundo_tela_intro_2, (0, 0))
-        exibe_texto("Utilize as setas:", rosa_claro, 240, 75, "regcrystal.ttf", 30)
-        screen.blit(img_setas,(395, 145))
+        exibe_texto("Utilize as setas:", rosa_claro, LARGURA_TELA/3.75, ALTURA_TELA/9.333, "regcrystal.ttf", 30)
+        screen.blit(img_setas,(LARGURA_TELA/2.278, ALTURA_TELA/4.827))
 
-        exibe_texto("Nao bata nas pedras!", rosa_claro, 190, 300, "regcrystal.ttf", 30)
-        screen.blit(img_obstaculo,(410, 390))
+        exibe_texto("Nao bata nas pedras!", rosa_claro, LARGURA_TELA/4.73, ALTURA_TELA/2.33, "regcrystal.ttf", 30)
+        screen.blit(img_obstaculo,(LARGURA_TELA/2.195, ALTURA_TELA/1.795))
 
-        #exibe_texto("escudos e cachorros-quentes podem ajudar na missão", rosa_claro, 15, 150, "regcrystal.ttf", 25)
-
-        exibe_texto("pressione M para ir ao menu", roxo, 107, 595, "regcrystal.ttf", 30)
-        exibe_texto("pressione espaco para Jogar", roxo, 90, 505, "regcrystal.ttf", 30)
+        exibe_texto("pressione M para ir ao menu", roxo, LARGURA_TELA/8.41, ALTURA_TELA/1.17, "regcrystal.ttf", 30)
+        exibe_texto("pressione espaco para Jogar", roxo, LARGURA_TELA/10, ALTURA_TELA/1.386, "regcrystal.ttf", 30)
         pygame.display.update()
         clock.tick(30)
 
+#!
 def tela_creditos():
     rodando = True
     while rodando:
@@ -557,9 +557,11 @@ def tela_creditos():
         screen.blit(fundo_tela_creditos, (0, 0))
         exibe_texto("Créditos", rosa_claro, LARGURA_TELA // 3+85, ALTURA_TELA // 3-160, "crystal.ttf", 45)
         exibe_texto("Desenvolvedora:", açaí , LARGURA_TELA // 3+15, ALTURA_TELA // 3-5, "regcrystal.ttf", 35)
-        exibe_texto("Lorrany Silva", açaí, LARGURA_TELA // 3+25, ALTURA_TELA // 3+70, "regcrystal.ttf", 40)
-        exibe_texto("orientador:", salmão, LARGURA_TELA // 3+165, ALTURA_TELA // 3+210, "regcrystal.ttf", 20)
-        exibe_texto("jorgiano vidal", salmão, LARGURA_TELA // 3+145, ALTURA_TELA // 3+240, "regcrystal.ttf", 20)
+        exibe_texto("Lorrany Silva", açaí, LARGURA_TELA // 3+25, ALTURA_TELA // 3+65, "regcrystal.ttf", 40)
+
+        exibe_texto("orientador:", salmão, LARGURA_TELA // 3+175, ALTURA_TELA // 3+200, "regcrystal.ttf", 20)
+        exibe_texto("jorgiano vidal", salmão, LARGURA_TELA // 3+155, ALTURA_TELA // 3+230, "regcrystal.ttf", 20)
+
         exibe_texto("pressione T para ver a equipe de testes", rosa_claro, LARGURA_TELA // 3 -257, ALTURA_TELA // 3+380, "regcrystal.ttf", 25)
 
         pygame.display.update()
@@ -585,7 +587,7 @@ def tela_beta_testers():
                     return   
 
         screen.blit(fundo_tela_creditos, (0, 0))
-        exibe_texto("Beta Testers", rosa_claro, LARGURA_TELA // 3+5, ALTURA_TELA // 3-90, "crystal.ttf", 45)
+        exibe_texto("Beta Testers", rosa_claro, LARGURA_TELA // 3+5, ALTURA_TELA // 3-130, "crystal.ttf", 45)
         exibe_texto("Julio Gleison", açaí , LARGURA_TELA // 3+60, ALTURA_TELA // 3+30, "regcrystal.ttf", 35)
         exibe_texto("Leticia Campos", açaí, LARGURA_TELA // 3+55, ALTURA_TELA // 3+115, "regcrystal.ttf", 35)
         exibe_texto("", salmão, LARGURA_TELA // 3+165, ALTURA_TELA // 3+210, "regcrystal.ttf", 20)
@@ -617,8 +619,8 @@ def tela_derrota():
 
         screen.blit(fundo_tela_derrota, (0, 0))
   
-        exibe_texto("Score", rosa_vermelho, LARGURA_TELA/1.168, ALTURA_TELA/38.888, "regcrystal.ttf", 20)  
-        exibe_texto(f"{pontuacao}", rosa_vermelho, LARGURA_TELA/1.125, ALTURA_TELA/12.28, "crewni.ttf", 25)
+        exibe_texto("Score", rosa_vermelho, LARGURA_TELA/1.168, ALTURA_TELA/38.888-10, "regcrystal.ttf", 20)  
+        exibe_texto(f"{pontuacao}", rosa_vermelho, LARGURA_TELA/1.125+5, ALTURA_TELA/12.28-10, "crewni.ttf", 25)
 
         exibe_texto("Nao foi dessa vez...", rosa_vermelho, LARGURA_TELA/36, ALTURA_TELA/28, "crystal.ttf", 40)
         exibe_texto("Mas nao desista!", cinza_roxo, LARGURA_TELA/45, ALTURA_TELA/7.368, "crystal.ttf", 40)
