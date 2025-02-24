@@ -4,26 +4,39 @@ import random
 #colores
 PRETO = (0,0,0)
 branco = (255,255,255)
-amarelo = (243,216,143)
-vermelho = (245,103,115)
-#paleta 1
+
+#paleta 1 (principal)
 azul_melodia_suave = (212,234,250)
 azul_ceu = (53,94,182)
 azul_azul = (61,175,237)
 azul_mirtilo = (57,121,195)
 lavanda = (185,168,248)
-#paleta 2
+#paleta 2 (creditos)
 rosa = (242,121,153)
 rosa_claro = (242,187,201)
 salmão = (242,137,114)
 açaí = (166,96,122)
 magenta = (166,86,145)
-#paleta 3
+#paleta 3 (instrucoes)
 rosa_seco = (242,148,173)
 roxo = (115,47,91)
 roxo_tom_claro = (203, 83, 161)
 verde = (90,140,126)
 verde_peridot = (196,242,208)
+#paleta 4 (derrota)
+amarelo = (242, 208, 145)
+rosa_vermelho = (242, 107, 131)
+rosa_bege = (242, 178, 172)
+cinza_roxo = (134, 121, 140)
+#paleta 5 (win1)
+amarelo_ouro = (255, 239, 155)
+marrom = (64, 44, 40)
+milkshake_de_acai = (107, 79, 98)
+rosa_salmao = (242, 144, 184)
+vitamina_de_abacate = (216, 217, 180)
+#paleta 6 (niveis)
+amarelo_niveis = (242, 203, 87)
+rosa_niveis = (239, 44, 149)
 
 #variáveis 
 LARGURA_TELA = 900
@@ -37,6 +50,8 @@ velocidade_y = 0
 gravidade = 0.5
 velocidade_x = 2
 dist_min_obs = 250  
+pontuacao = 0
+nivel = 0
 
 pygame.init()
 icon = pygame.image.load('icon.png')
@@ -47,11 +62,11 @@ clock = pygame.time.Clock()
 
 #audio
 pygame.mixer.init()
-pygame.mixer.music.load("msc_tema.mp3")
+pygame.mixer.music.load("msc_tema.ogg")
 pygame.mixer.music.play(-1)
 pygame.mixer.music.set_volume(0.15)
-gameoversound = pygame.mixer.Sound("gameover.mp3")
-jumpsound = pygame.mixer.Sound("jump2.mp3")
+gameoversound = pygame.mixer.Sound("gameover.ogg")
+jumpsound = pygame.mixer.Sound("jump.ogg")
 
 #fontes
 crewni = pygame.font.Font("crewni.ttf", 85)
@@ -65,11 +80,15 @@ fundo_tela_creditos = pygame.image.load("tela_creditos.jpg")
 fundo_tela_intro = pygame.image.load("tela_intro.png")
 fundo_tela_intro_2 = pygame.image.load("tela_intro_2.png")
 fundo_tela_derrota = pygame.image.load("tela_derrota.png")
+fundo_tela_win1 = pygame.image.load("tela_win1.png")
+fundo_tela_niveis = pygame.image.load("tela_niveis.jpg")
 fundo_tela_inicial = pygame.transform.scale(fundo_tela_inicial, (LARGURA_TELA, ALTURA_TELA))
 fundo_tela_creditos= pygame.transform.scale(fundo_tela_creditos, (LARGURA_TELA, ALTURA_TELA))
 fundo_tela_intro = pygame.transform.scale(fundo_tela_intro, (LARGURA_TELA, ALTURA_TELA))
 fundo_tela_intro_2 = pygame.transform.scale(fundo_tela_intro_2, (LARGURA_TELA, ALTURA_TELA))
 fundo_tela_derrota = pygame.transform.scale(fundo_tela_derrota, (LARGURA_TELA, ALTURA_TELA))
+fundo_tela_win1 = pygame.transform.scale(fundo_tela_win1, (LARGURA_TELA, ALTURA_TELA))
+fundo_tela_niveis = pygame.transform.scale(fundo_tela_niveis, (LARGURA_TELA, ALTURA_TELA))
 
 orig_largura, orig_altura = fundo.get_size()
 escala = ALTURA_TELA / orig_altura
@@ -86,14 +105,19 @@ img_setas = pygame.transform.scale(setas, tam_setas)
 tam_bisc_gat = (100, 225)
 
 #steven
-tam_steven = (125, 125)
+tam_steven = (120, 120)
 frames_steven = [
     pygame.transform.scale(pygame.image.load("1.png"), tam_steven),
     pygame.transform.scale(pygame.image.load("2.png"), tam_steven),
     pygame.transform.scale(pygame.image.load("3.png"), tam_steven),
+    pygame.transform.scale(pygame.image.load("4.png"), tam_steven),
+    pygame.transform.scale(pygame.image.load("5.png"), tam_steven),
+    pygame.transform.scale(pygame.image.load("6.png"), tam_steven),
+    pygame.transform.scale(pygame.image.load("7.png"), tam_steven),
+
 ]
 frame_atual = 0
-tempo_entre_frames = 100  #milissegundos
+tempo_entre_frames = 85  #milissegundos
 ultimo_tempo = pygame.time.get_ticks()
 altura_personagem = frames_steven[frame_atual].get_height()
 
@@ -125,8 +149,84 @@ def desenha_img_obstaculo(x, y):
     largura, altura = img_obstaculo.get_size()
     screen.blit(img_obstaculo, (x - largura // 2, y - altura // 2))
 
+def tela_inicial():
+    rodando = True
+    while rodando:
+        for evento in pygame.event.get():
+            if evento.type == pygame.QUIT:
+                pygame.quit()
+                return
+            elif evento.type == pygame.KEYDOWN:
+                if evento.key == pygame.K_SPACE:
+                    fade_out(screen, rosa_niveis)
+                    tela_niveis()
+                    return
+                elif evento.key == pygame.K_ESCAPE:
+                    pygame.quit()
+                elif evento.key == pygame.K_i:
+                    fade_out(screen)
+                    tela_intro()
+                    return
+                elif evento.key == pygame.K_c:
+                    fade_out(screen, rosa_seco)
+                    tela_creditos()
+                    return
+
+        screen.blit(fundo_tela_inicial, (0, 0))
+        exibe_texto("Steven Pursuit", azul_ceu, LARGURA_TELA // 3-205, ALTURA_TELA // 3-150, "crystal.ttf", 50)
+        exibe_texto("pressione espaco para jogar", azul_ceu, LARGURA_TELA // 3 -140, ALTURA_TELA // 3-15, "regcrystal.ttf", 25)
+        exibe_texto("I para instrucoes", azul_melodia_suave, LARGURA_TELA // 3 -8, ALTURA_TELA // 3+350, "crystal.ttf", 25)
+        exibe_texto("C para créditos", azul_melodia_suave, LARGURA_TELA // 3 -9, ALTURA_TELA // 3+405, "crystal.ttf", 25)
+
+        pygame.display.update()
+        clock.tick(30)
+
+def tela_niveis():
+    global nivel
+    rodando = True
+    while rodando:
+        for evento in pygame.event.get():
+            if evento.type == pygame.QUIT:
+                pygame.quit()
+                return
+            elif evento.type == pygame.KEYDOWN:
+                if evento.key == pygame.K_ESCAPE:
+                    pygame.quit()
+                elif evento.key == pygame.K_KP_1 or evento.key == pygame.K_1:
+                    nivel = 1
+                    fade_out(screen, azul_melodia_suave)
+                    jogo()
+                    return
+                elif evento.key == pygame.K_KP_2 or evento.key == pygame.K_2:
+                    nivel = 2
+                    fade_out(screen, azul_melodia_suave)
+                    jogo()
+                    return
+                elif evento.key == pygame.K_KP_3 or evento.key == pygame.K_3:
+                    nivel = 3
+                    fade_out(screen, azul_melodia_suave)
+                    jogo()
+                    return
+                elif evento.key == pygame.K_m:
+                    fade_out(screen, lavanda)
+                    tela_inicial()
+                    return   
+      
+
+        screen.blit(fundo_tela_niveis, (0, 0))
+        exibe_texto("Escolha o nivel", amarelo_niveis, 35, 50, "regcrystal.ttf", 40)
+        exibe_texto("Pressione 1, 2 ou 3", amarelo_niveis, 60, 175, "crewni.ttf", 40)
+
+        exibe_texto("1", amarelo_niveis, 251, 300, "crewni.ttf", 50)
+        exibe_texto("2", amarelo_niveis, 250, 410, "crewni.ttf", 50)
+        exibe_texto("3", amarelo_niveis, 250, 520, "crewni.ttf", 50)
+
+
+        pygame.display.update()
+        clock.tick(30)
+
 def jogo():
-    global perso_x, perso_y, velocidade_y, fundo_x, frame_atual, ultimo_tempo
+    global perso_x, perso_y, velocidade_y, fundo_x, frame_atual, ultimo_tempo, pontuacao, nivel
     perso_x = 50
     perso_y = chao_y - frames_steven[0].get_height()
     velocidade_y = 0
@@ -153,6 +253,10 @@ def jogo():
     fase5_mostrada = False  
     tempo_fase5 = 0 
     fase5_ativa = False
+
+    fase6_mostrada = False  
+    tempo_fase6 = 0 
+    fase6_ativa = False
 
     rodando = True
     while rodando:
@@ -187,7 +291,10 @@ def jogo():
             ultimo_tempo = agora
 
 
-        if fase5_ativa:
+        if fase6_ativa:
+            chance = 6 
+            velocidade_obstaculo = 7 
+        elif fase5_ativa:
             chance = 5 
             velocidade_obstaculo = 7  
         elif fase4_ativa:
@@ -219,14 +326,14 @@ def jogo():
 
         for obstaculo_x, obstaculo_y in obstaculos:
             if checa_colisao_retangulos(perso_x, perso_y, frames_steven[frame_atual], obstaculo_x, obstaculo_y, img_obstaculo):
-                exibe_texto("Colisão!", PRETO, LARGURA_TELA // 3, ALTURA_TELA // 2, "crewni.ttf", 20)  
+                #exibe_texto("Colisão!", PRETO, LARGURA_TELA // 3, ALTURA_TELA // 2, "crewni.ttf", 20)  
                 pygame.mixer.music.set_volume(0.055)              
                 gameoversound.play() 
                 pygame.display.update()
-                pygame.time.delay(1500) 
+                pygame.time.delay(1000)
                 pygame.mixer.music.set_volume(0.15)        
+                fade_out(screen, amarelo)
                 tela_derrota()
-
         
         obstaculos = [obs for obs in obstaculos if obs[0] > 0]
 
@@ -247,29 +354,81 @@ def jogo():
             desenha_img_obstaculo(obstaculo_x, obstaculo_y)
 
         pontuacao += 1
-        exibe_texto(f"Pontuação: {pontuacao}", lavanda, 10, 10, "crewni.ttf", 20)    
+        exibe_texto(f"Score: {pontuacao}", lavanda, 10, 10, "crewni.ttf", 20)    
 
-        if pontuacao >= 1000 and not fase1_ativa:
+
+        #niveis
+        if nivel == 1 and pontuacao >= 6000:
+                pygame.mixer.music.stop() 
+                pygame.mixer.music.load("msc_win.ogg")  
+                pygame.mixer.music.play(-1) 
+                pygame.mixer.music.set_volume(0.15)
+                fade_out(screen, rosa_salmao,10)
+                pygame.display.update()
+                tela_win1()       
+                return
+        if nivel == 2 and pontuacao >= 7500:
+                pygame.mixer.music.stop() 
+                pygame.mixer.music.load("msc_win.ogg")  
+                pygame.mixer.music.play(-1) 
+                pygame.mixer.music.set_volume(0.15)
+                fade_out(screen, rosa_salmao,10)
+                pygame.display.update()
+                tela_win1()       
+                return
+        if nivel == 3 and pontuacao >= 10000:
+                pygame.mixer.music.stop() 
+                pygame.mixer.music.load("msc_win.ogg")  
+                pygame.mixer.music.play(-1) 
+                pygame.mixer.music.set_volume(0.15)
+                fade_out(screen, rosa_salmao,10)
+                pygame.display.update()
+                tela_win1()       
+                return
+        if nivel == 1 and pontuacao >= 150 and pontuacao <=300:    
+            exibe_texto("Consiga              de score!", azul_ceu, 160, 295, "regcrystal.ttf", 30)
+            exibe_texto("6.000", azul_ceu, 385, 300, "crewni.ttf", 40)
+        if nivel == 2 and pontuacao >= 150 and pontuacao <=300:    
+            exibe_texto("Consiga              de score!", azul_ceu, 160, 295, "regcrystal.ttf", 30)
+            exibe_texto("7.500", azul_ceu, 385, 300, "crewni.ttf", 40)
+        if nivel == 3 and pontuacao >= 150 and pontuacao <=300:    
+            exibe_texto("Consiga               de score!", azul_ceu, 160, 295, "regcrystal.ttf", 30)
+            exibe_texto("10.000", azul_ceu, 383, 300, "crewni.ttf", 40)
+   
+        #quase la
+        if nivel == 1 and pontuacao >= 5000 and pontuacao <=5150:    
+            exibe_texto("quase la!", azul_ceu, 315, 295, "crystal.ttf", 35)
+        if nivel == 2 and pontuacao >= 6750 and pontuacao <=6900:    
+            exibe_texto("quase la!", azul_ceu, 315, 295, "crystal.ttf", 35)
+        if nivel == 3 and pontuacao >= 9000 and pontuacao <=9150:    
+            exibe_texto("quase la!", azul_ceu, 315, 295, "crystal.ttf", 35)
+        
+        #fases
+        if pontuacao >= 500 and not fase1_ativa:
             fase1_ativa = True
             fase1_mostrada = True
             tempo_fase1 = pygame.time.get_ticks()
-        if pontuacao >= 2000 and not fase2_ativa:
+        if pontuacao >= 1250 and not fase2_ativa:
             fase2_ativa = True
             fase2_mostrada = True
             tempo_fase2 = pygame.time.get_ticks()
-        if pontuacao >= 3000 and not fase3_ativa:
+        if pontuacao >= 2250 and not fase3_ativa:
             fase3_ativa = True
             fase3_mostrada = True
             tempo_fase3 = pygame.time.get_ticks()
-        if pontuacao >= 4000 and not fase4_ativa:
+        if pontuacao >= 3500 and not fase4_ativa:
             fase4_ativa = True
             fase4_mostrada = True
             tempo_fase4 = pygame.time.get_ticks()    
-        if pontuacao >= 5000 and not fase5_ativa:
+        if pontuacao >= 4500 and not fase5_ativa:
             fase5_ativa = True
             fase5_mostrada = True
-            tempo_fase5 = pygame.time.get_ticks() 
-        
+            tempo_fase5 = pygame.time.get_ticks()
+        if pontuacao >= 6500 and not fase6_ativa:
+            fase6_ativa = True
+            fase6_mostrada = True
+            tempo_fase6 = pygame.time.get_ticks() 
+         
         if fase1_mostrada:
             screen.blit(regcrystal.render("Fase", True, azul_melodia_suave), (285, 295))
             screen.blit(crewni.render("1", True, azul_melodia_suave), (580, 290))
@@ -295,44 +454,17 @@ def jogo():
             screen.blit(crewni.render("5", True, azul_melodia_suave), (580, 290))
             if pygame.time.get_ticks() - tempo_fase5 > 2250:
                 fase5_mostrada = False
+        if fase6_mostrada:
+            screen.blit(regcrystal.render("Fase", True, azul_melodia_suave), (285, 295))
+            screen.blit(crewni.render("6", True, azul_melodia_suave), (580, 290))
+            if pygame.time.get_ticks() - tempo_fase6 > 2250:
+                fase6_mostrada = False        
 
 
         pygame.display.update()
         clock.tick(60)
 
     tela_inicial()
-
-def tela_inicial():
-    rodando = True
-    while rodando:
-        for evento in pygame.event.get():
-            if evento.type == pygame.QUIT:
-                pygame.quit()
-                return
-            elif evento.type == pygame.KEYDOWN:
-                if evento.key == pygame.K_SPACE:
-                    fade_out(screen, azul_melodia_suave)
-                    jogo()
-                    return
-                elif evento.key == pygame.K_ESCAPE:
-                    pygame.quit()
-                elif evento.key == pygame.K_i:
-                    fade_out(screen)
-                    tela_intro()
-                    return
-                elif evento.key == pygame.K_c:
-                    fade_out(screen, rosa_seco)
-                    tela_créditos()
-                    return
-
-        screen.blit(fundo_tela_inicial, (0, 0))
-        exibe_texto("Steven Pursuit", azul_ceu, LARGURA_TELA // 3-205, ALTURA_TELA // 3-150, "crystal.ttf", 50)
-        exibe_texto("pressione espaco para jogar", azul_ceu, LARGURA_TELA // 3 -140, ALTURA_TELA // 3-15, "regcrystal.ttf", 25)
-        exibe_texto("I para instrucoes", azul_melodia_suave, LARGURA_TELA // 3 -8, ALTURA_TELA // 3+350, "crystal.ttf", 25)
-        exibe_texto("C para créditos", azul_melodia_suave, LARGURA_TELA // 3 -9, ALTURA_TELA // 3+405, "crystal.ttf", 25)
-
-        pygame.display.update()
-        clock.tick(30)
 
 def tela_intro():
     rodando = True
@@ -343,14 +475,15 @@ def tela_intro():
                 return
             elif evento.type == pygame.KEYDOWN:
                 if evento.key == pygame.K_SPACE:
-                    fade_out(screen, azul_melodia_suave)
-                    jogo()
+                    fade_out(screen, rosa_niveis)
+                    tela_niveis()
                     return
                 elif evento.key == pygame.K_ESCAPE:
                     pygame.quit()
                 elif evento.key in [pygame.K_RETURN, pygame.K_KP_ENTER]:  
                     fade_out(screen)
                     tela_intro_2()
+                    return
                 elif evento.key == pygame.K_m:
                     fade_out(screen)
                     tela_inicial()
@@ -374,8 +507,8 @@ def tela_intro_2():
                 return
             elif evento.type == pygame.KEYDOWN:
                 if evento.key == pygame.K_SPACE:
-                    fade_out(screen, azul_melodia_suave)
-                    jogo()
+                    fade_out(screen, rosa_niveis)
+                    tela_niveis()
                     return
                 elif evento.key == pygame.K_ESCAPE:
                     pygame.quit()
@@ -398,7 +531,7 @@ def tela_intro_2():
         pygame.display.update()
         clock.tick(30)
 
-def tela_créditos():
+def tela_creditos():
     rodando = True
     while rodando:
         for evento in pygame.event.get():
@@ -407,14 +540,15 @@ def tela_créditos():
                 return
             elif evento.type == pygame.KEYDOWN:
                 if evento.key == pygame.K_SPACE:
-                    fade_out(screen, azul_melodia_suave)
-                    jogo()
+                    fade_out(screen, rosa_niveis)
+                    tela_niveis()
                     return
                 elif evento.key == pygame.K_ESCAPE:
                     pygame.quit()
                 elif evento.key == pygame.K_t:
                     fade_out(screen, rosa_seco)
                     tela_beta_testers()  
+                    return
                 elif evento.key == pygame.K_m:
                     fade_out(screen, rosa_seco)
                     tela_inicial()
@@ -440,8 +574,8 @@ def tela_beta_testers():
                 return
             elif evento.type == pygame.KEYDOWN:
                 if evento.key == pygame.K_SPACE:
-                    fade_out(screen, azul_melodia_suave)
-                    jogo()
+                    fade_out(screen, rosa_niveis)
+                    tela_niveis()
                     return
                 elif evento.key == pygame.K_ESCAPE:
                     pygame.quit()
@@ -462,6 +596,7 @@ def tela_beta_testers():
         clock.tick(30)
 
 def tela_derrota():
+    global pontuacao
     rodando = True
     while rodando:
         for evento in pygame.event.get():
@@ -470,21 +605,76 @@ def tela_derrota():
                 return
             elif evento.type == pygame.KEYDOWN:
                 if evento.key == pygame.K_SPACE:
-                    fade_out(screen, azul_melodia_suave)
-                    jogo()
+                    fade_out(screen, rosa_niveis)
+                    tela_niveis()
                     return
                 elif evento.key == pygame.K_ESCAPE:
                     pygame.quit()
                 elif evento.key == pygame.K_m:
+                    fade_out(screen, lavanda)
+                    tela_inicial()
+                    return   
+
+        screen.blit(fundo_tela_derrota, (0, 0))
+  
+        exibe_texto("Score", rosa_vermelho, LARGURA_TELA/1.168, ALTURA_TELA/38.888, "regcrystal.ttf", 20)  
+        exibe_texto(f"{pontuacao}", rosa_vermelho, LARGURA_TELA/1.125, ALTURA_TELA/12.28, "crewni.ttf", 25)
+
+        exibe_texto("Nao foi dessa vez...", rosa_vermelho, LARGURA_TELA/36, ALTURA_TELA/28, "crystal.ttf", 40)
+        exibe_texto("Mas nao desista!", cinza_roxo, LARGURA_TELA/45, ALTURA_TELA/7.368, "crystal.ttf", 40)
+
+        exibe_texto("pressione espaco para Jogar", amarelo, LARGURA_TELA/9, ALTURA_TELA/1.228, "regcrystal.ttf", 30)
+        exibe_texto("pressione M para ir ao menu", amarelo, LARGURA_TELA/8.57, ALTURA_TELA/1.12, "regcrystal.ttf", 30)
+
+        pygame.display.update()
+        clock.tick(30)
+
+def tela_win1():
+    global pontuacao
+    pygame.mixer.music.set_volume(0.15) 
+
+    rodando = True
+    while rodando:
+        for evento in pygame.event.get():
+            if evento.type == pygame.QUIT:
+                pygame.quit()
+                return
+            elif evento.type == pygame.KEYDOWN:
+                if evento.key == pygame.K_SPACE:
+                    pygame.mixer.music.stop() 
+                    pygame.mixer.music.load("msc_tema.ogg")  
+                    pygame.mixer.music.play(-1) 
+                    pygame.mixer.music.set_volume(0.15)
+                    fade_out(screen, rosa_niveis)
+                    tela_niveis()
+                    return
+                elif evento.key == pygame.K_ESCAPE:
+                    pygame.quit()
+                elif evento.key == pygame.K_m:
+                    pygame.mixer.music.stop() 
+                    pygame.mixer.music.load("msc_tema.ogg")  
+                    pygame.mixer.music.play(-1) 
+                    pygame.mixer.music.set_volume(0.15)
+                    fade_out(screen, lavanda)
                     tela_inicial()
                     return   
       
 
-        screen.blit(fundo_tela_derrota, (0, 0))
-        exibe_texto("Nao foi dessa vez...", vermelho, 60, 70, "crystal.ttf", 40)
-        exibe_texto("Mas nao desista!", amarelo, 60, 510, "crystal.ttf", 40)
+        screen.blit(fundo_tela_win1, (0, 0))
+        exibe_texto("Score:", vitamina_de_abacate, LARGURA_TELA//7+5, ALTURA_TELA//20+11, "regcrystal.ttf", 25)  
+        exibe_texto(f"{pontuacao}", vitamina_de_abacate, LARGURA_TELA/5.5, ALTURA_TELA/8.75+15, "crewni.ttf", 35)
+    
 
-        exibe_texto("pressione espaco para jogar novamente!", amarelo, 30, 610, "crystal.ttf", 25)
+        exibe_texto("Parabéns!", rosa_salmao, LARGURA_TELA/36, ALTURA_TELA/2.97, "crystal.ttf", 40)
+        exibe_texto("voce", rosa_salmao, LARGURA_TELA/45, ALTURA_TELA/2.09, "crystal.ttf", 40)
+        exibe_texto("arrasou!!", rosa_salmao, LARGURA_TELA/45, ALTURA_TELA/1.75, "crystal.ttf", 40)
+
+        exibe_texto("Steven esta", marrom, LARGURA_TELA/1.52, ALTURA_TELA/2.96+17, "regcrystal.ttf", 25)
+        exibe_texto("muito feliz", marrom, LARGURA_TELA/1.487, ALTURA_TELA/2.22+1, "regcrystal.ttf", 25)
+        exibe_texto("com o seu", marrom, LARGURA_TELA/1.463,ALTURA_TELA/1.912+2, "regcrystal.ttf", 25)
+        exibe_texto("biscoito gatinho", marrom, LARGURA_TELA/1.63, ALTURA_TELA/1.75+20, "regcrystal.ttf", 25)
+
+        exibe_texto("pressione M para voltar ao menu", milkshake_de_acai, LARGURA_TELA/8.18, ALTURA_TELA/1.129, "regcrystal.ttf", 25)
 
         pygame.display.update()
         clock.tick(30)
