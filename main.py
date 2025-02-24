@@ -133,7 +133,7 @@ def fade_out(screen, color=PRETO, speed=10):
 
 def checa_colisao_retangulos(perso_x, perso_y, personagem_img, obstaculo_x, obstaculo_y, obstaculo_img):
     personagem_rect = personagem_img.get_rect(topleft=(perso_x, perso_y))
-    personagem_rect = personagem_rect.inflate(-personagem_rect.width * 0.35, -personagem_rect.height * 0.3)
+    personagem_rect = personagem_rect.inflate(-personagem_rect.width * 0.4, -personagem_rect.height * 0.3)
     
     obstaculo_rect = obstaculo_img.get_rect(center=(obstaculo_x, obstaculo_y))
     obstaculo_rect = obstaculo_rect.inflate(-obstaculo_rect.width * 0.35, -obstaculo_rect.height * 0.3)
@@ -173,8 +173,8 @@ def tela_inicial():
                     return
 
         screen.blit(fundo_tela_inicial, (0, 0))
-        exibe_texto("Steven Pursuit", azul_ceu, LARGURA_TELA // 3-205, ALTURA_TELA // 3-170, "crystal.ttf", 50)
-        exibe_texto("pressione espaco para jogar", azul_ceu, LARGURA_TELA // 3 -140, ALTURA_TELA // 3-25, "regcrystal.ttf", 25)
+        exibe_texto("Steven Pursuit", azul_ceu, LARGURA_TELA // 3-205, ALTURA_TELA // 3-185, "crystal.ttf", 50)
+        exibe_texto("pressione espaco para jogar", azul_ceu, LARGURA_TELA // 3 -140, ALTURA_TELA // 3-35, "regcrystal.ttf", 25)
         exibe_texto("I para instrucoes", azul_melodia_suave, LARGURA_TELA // 3 -8, ALTURA_TELA // 3+340, "crystal.ttf", 25)
         exibe_texto("C para créditos", azul_melodia_suave, LARGURA_TELA // 3 -9, ALTURA_TELA // 3+395, "crystal.ttf", 25)
 
@@ -359,7 +359,7 @@ def jogo():
 
 
         #niveis
-        if nivel == 1 and pontuacao >= 6000:
+        if nivel == 1 and pontuacao >= 60:
                 pygame.mixer.music.stop() 
                 pygame.mixer.music.load("msc_win.ogg")  
                 pygame.mixer.music.play(-1) 
@@ -530,7 +530,6 @@ def tela_intro_2():
         pygame.display.update()
         clock.tick(30)
 
-#!
 def tela_creditos():
     rodando = True
     while rodando:
@@ -663,8 +662,8 @@ def tela_win1():
       
 
         screen.blit(fundo_tela_win1, (0, 0))
-        exibe_texto("Score:", vitamina_de_abacate, LARGURA_TELA//7+5, ALTURA_TELA//20+11, "regcrystal.ttf", 25)  
-        exibe_texto(f"{pontuacao}", vitamina_de_abacate, LARGURA_TELA/5.5, ALTURA_TELA/8.75+15, "crewni.ttf", 35)
+        exibe_texto("Score:", vitamina_de_abacate, LARGURA_TELA//7+5, ALTURA_TELA//20, "regcrystal.ttf", 25)  
+        exibe_texto(f"{pontuacao}", vitamina_de_abacate, LARGURA_TELA/5.5+5, ALTURA_TELA/8.75, "crewni.ttf", 35)
     
 
         exibe_texto("Parabéns!", rosa_salmao, LARGURA_TELA/36, ALTURA_TELA/2.97, "crystal.ttf", 40)
