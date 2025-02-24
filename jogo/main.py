@@ -105,14 +105,19 @@ img_setas = pygame.transform.scale(setas, tam_setas)
 tam_bisc_gat = (100, 225)
 
 #steven
-tam_steven = (125, 125)
+tam_steven = (120, 120)
 frames_steven = [
     pygame.transform.scale(pygame.image.load("1.png"), tam_steven),
     pygame.transform.scale(pygame.image.load("2.png"), tam_steven),
     pygame.transform.scale(pygame.image.load("3.png"), tam_steven),
+    pygame.transform.scale(pygame.image.load("4.png"), tam_steven),
+    pygame.transform.scale(pygame.image.load("5.png"), tam_steven),
+    pygame.transform.scale(pygame.image.load("6.png"), tam_steven),
+    pygame.transform.scale(pygame.image.load("7.png"), tam_steven),
+
 ]
 frame_atual = 0
-tempo_entre_frames = 100  #milissegundos
+tempo_entre_frames = 85  #milissegundos
 ultimo_tempo = pygame.time.get_ticks()
 altura_personagem = frames_steven[frame_atual].get_height()
 
