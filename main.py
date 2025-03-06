@@ -359,7 +359,7 @@ def jogo():
 
 
         #niveis
-        if nivel == 1 and pontuacao >= 60:
+        if nivel == 1 and pontuacao >= 6000:
                 pygame.mixer.music.stop() 
                 pygame.mixer.music.load("msc_win.ogg")  
                 pygame.mixer.music.play(-1) 
